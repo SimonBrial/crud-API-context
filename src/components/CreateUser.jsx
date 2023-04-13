@@ -10,29 +10,10 @@ const CreateUser = () => {
         name: '',
         last: '',
     });
-    /* console.log(users);
-    console.log(userForUpdate); */
-
-    useEffect(() => {
-        if (userForUpdate && userForUpdate !== '') {
-            const userFound = users.find(user => user.id === userForUpdate)
-            console.log(userFound)
-            setName(userFound.name)
-            setLast(userFound.last)
-            setUser({
-                id: userFound.id,
-                name: userFound.name,
-                last: userFound.last,
-            })
-            updateUser(userFound)
-        } else {
-            setName('')
-            setLast('')
-        }
-    }, [userForUpdate])
 
     const [name, setName] = useState('');
     const [last, setLast] = useState('');
+    const [idUpdate, setIdUpdate] = useState(false);
 
     const styles = {
         form: {
@@ -60,6 +41,29 @@ const CreateUser = () => {
             margin: '0 10px',
         }
     }
+    /* console.log(users);
+    console.log(userForUpdate); */
+
+    useEffect(() => {
+        if (userForUpdate && userForUpdate !== '') {
+            const userFound = users.find(user => user.id === userForUpdate)
+            console.log(userFound)
+            setIdUpdate(true)
+            setName(userFound.name)
+            setLast(userFound.last)
+            setUser({
+                id: userFound.id,
+                name: userFound.name,
+                last: userFound.last,
+            })
+            updateUser(userFound)
+        } else {
+            setName('')
+            setLast('')
+        }
+    }, [userForUpdate])
+
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -83,6 +87,7 @@ const CreateUser = () => {
             updateUser(userUpdated);
             setName('')
             setLast('')
+            setIdUpdate(false)
         }
     }
 
@@ -100,7 +105,7 @@ const CreateUser = () => {
             <h1>API CONTEXT - REACT</h1>
             <form style={styles.form}>
                 <div style={styles.div1}>
-                    <p>{userForUpdate ? userForUpdate : ''}</p>
+                    <p>{idUpdate ? userForUpdate : ''}</p>
                     <div style={styles.div2}>
                         <label style={styles.label}>Name:</label>
                         <input
@@ -121,7 +126,7 @@ const CreateUser = () => {
                     </div>
                 </div>
                 <button type='submit' style={styles.btn} onClick={handleSubmit}>
-                    {userForUpdate ? 'Edit user' : 'Create user'}
+                    {(idUpdate) ? 'Edit user' : 'Create user'}
                 </button>
             </form>
         </div>
