@@ -38,7 +38,8 @@ const userReducer = (state, action) => {
 
             return {
                 ...state,
-                users: updatedUsers
+                users: updatedUsers,
+                userForUpdate: updatedUser.id
             }
 
         default:

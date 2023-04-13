@@ -4,20 +4,32 @@ import { nanoid } from 'nanoid';
 
 const CreateUser = () => {
 
-    const { users, addUser, updateUser } = useContext(UserContext);
-    //console.log(users);
-
-    /* useEffect((id) => {
-        const userFound = users.find(user => user.id === id)
-        console.log(userFound)
-    }, []) */
-
-
+    const { users, userForUpdate, addUser, updateUser } = useContext(UserContext);
     const [user, setUser] = useState({
         id: nanoid(5),
         name: '',
         last: '',
     });
+    /* console.log(users);
+    console.log(userForUpdate); */
+
+    useEffect(() => {
+        if (userForUpdate && userForUpdate !== '') {
+            const userFound = users.find(user => user.id === userForUpdate)
+            console.log(userFound)
+            setName(userFound.name)
+            setLast(userFound.last)
+            setUser({
+                id: userFound.id,
+                name: userFound.name,
+                last: userFound.last,
+            })
+            updateUser(userFound)
+        } else {
+            setName('')
+            setLast('')
+        }
+    }, [userForUpdate])
 
     const [name, setName] = useState('');
     const [last, setLast] = useState('');
@@ -52,20 +64,25 @@ const CreateUser = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (name !== '' && last !== '') {
-            console.log(`Tengo un usuario: ${name} ${last}`)
-            setUser({
+        if (name !== '' && last !== '' && !userForUpdate) {
+            const newUser = {
                 id: nanoid(5),
                 name: name,
                 last: last,
-            })
-            //console.log(user)
-            addUser(user);
+            }
+            addUser(newUser);
             setName('')
             setLast('')
-        } else {
-            console.log(' no tengo usuario')
-
+        } else if (name !== '' && last !== '' && userForUpdate) {
+            const userUpdated = {
+                id: userForUpdate,
+                name: name,
+                last: last,
+            }
+            console.log(userUpdated)
+            updateUser(userUpdated);
+            setName('')
+            setLast('')
         }
     }
 
@@ -83,6 +100,7 @@ const CreateUser = () => {
             <h1>API CONTEXT - REACT</h1>
             <form style={styles.form}>
                 <div style={styles.div1}>
+                    <p>{userForUpdate ? userForUpdate : ''}</p>
                     <div style={styles.div2}>
                         <label style={styles.label}>Name:</label>
                         <input
@@ -103,8 +121,7 @@ const CreateUser = () => {
                     </div>
                 </div>
                 <button type='submit' style={styles.btn} onClick={handleSubmit}>
-                    Add
-                    {/*!user ? 'Create user' : 'Edit user' */}
+                    {userForUpdate ? 'Edit user' : 'Create user'}
                 </button>
             </form>
         </div>

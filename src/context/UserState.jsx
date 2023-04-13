@@ -8,7 +8,8 @@ import { ADD_USER, UPDATE_USER, DELETE_USER } from "./actions";
 const UserState = ({ children }) => {
 
     const initialState = {
-        users: []
+        users: [],
+        userForUpdate: ''
     }
 
     const [state, dispatch] = useReducer(userReducer, initialState);
@@ -38,7 +39,7 @@ const UserState = ({ children }) => {
 
     return (
         <UserContext.Provider value={{ 
-            ...state, 
+            ...state,
             addUser,
             deleteUser,
             updateUser
